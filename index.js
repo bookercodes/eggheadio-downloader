@@ -21,7 +21,6 @@ btn.click(function() {
   var videos = [];
   $.each(links, function(index, link) {
     $.get(link).done(function(html) {
-      anmas
       videos.push($(html).find('#clicker1').attr('href'));
       if (videos.length === lessonCount) {
         btn.text(btnDefaultText);
