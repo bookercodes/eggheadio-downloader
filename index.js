@@ -1,11 +1,11 @@
 function saveTextFile(filename, text) {
-  var ele = document.createElement('a');
-  ele.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  ele.setAttribute('download', filename);
-  ele.style.display = 'none';
-  document.body.appendChild(ele);
-  ele.click();
-  document.body.removeChild(ele);
+  var anchor = $('<a></a>');
+  anchor.attr('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  anchor.attr('download', filename);
+  anchor.hide();
+  $("body").append(anchor);
+  anchor[0].click();
+  anchor.remove();
 }
 $('.header-navigation-list').append('<li><a id="btn-dl-all" href="#"></a></li>');
 var btnDefaultText = 'Download This Series';
