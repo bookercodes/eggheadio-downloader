@@ -8,7 +8,7 @@ function saveTextFile(filename, text) {
   anchor.remove();
 }
 
-$('.header-navigation-list').append('<li><a id="button-dl-all" href="#">Download This Series</a></li>');
+$('.header-navigation-list:first').append('<li><a id="button-dl-all" href="#">Download This Series</a></li>');
 
 var button = $('#button-dl-all');
 
