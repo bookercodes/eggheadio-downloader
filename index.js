@@ -7,25 +7,36 @@ function saveTextFile(filename, text) {
   anchor[0].click();
   anchor.remove();
 }
-$('.header-navigation-list').append('<li><a id="btn-dl-all" href="#"></a></li>');
-var btnDefaultText = 'Download This Series';
-var btn = $('#btn-dl-all');
-btn.text(btnDefaultText);
-btn.click(function() {
-  btn.text('Loading...');
-  var anchors = $('h4.title > a');
-  var lessonCount = anchors.length;
-  var links = $.map(anchors, function(anchor) {
+
+$('.header-navigation-list').append('<li><a id="button-dl-all" href="#">Download This Series</a></li>');
+
+var button = $('#button-dl-all');
+
+function fetchLessonDownloadLink(lessonLink, done) {
+  $.get(lessonLink).done(function(html) {
+    var lessonDownloadLink = $(html).find('#clicker1').attr('href');
+    done(lessonDownloadLink);
+  });
+}
+
+button.click(function() {
+  button.text('Loading...');
+
+  var lessonAnchors = $('h4.title > a');
+  var lessonLinks = $.map(lessonAnchors, function(anchor) {
     return anchor.href;
   });
-  var videos = [];
-  $.each(links, function(index, link) {
-    $.get(link).done(function(html) {
-      videos.push($(html).find('#clicker1').attr('href'));
-      if (videos.length === lessonCount) {
-        btn.text(btnDefaultText);
+  var lessonCount = lessonLinks.length;
+  var lessonDownloadLinks = [];
+
+  $.each(lessonLinks, function(index, lessonLink) {
+    fetchLessonDownloadLink(lessonLink, function(lessonDownloadLink) {
+      lessonDownloadLinks.push(lessonDownloadLink);
+      if (lessonDownloadLinks.length === lessonCount) {
+        button.text('Download This Series');
         var seriesName = location.pathname.split('/')[2];
-        saveTextFile(seriesName + '.txt', videos.join('\r\n'));
+        var crlf = '\r\n';
+        saveTextFile(seriesName + '.txt', lessonDownloadLinks.join(crlf));
       }
     });
   });
